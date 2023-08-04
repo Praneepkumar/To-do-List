@@ -49,7 +49,7 @@ button:hover{
 .list-input-feild{
   display: flex;
   flex-direction: column;
-gap: 15px;
+gap: 20px;
 }
 .list-input-feild > input{
   width: 90%;
@@ -58,7 +58,7 @@ gap: 15px;
 .input-filters{
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 .radio-filters{
   display: flex;
