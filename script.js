@@ -10,42 +10,40 @@ const listContainer = document.querySelector(".render-list");
 let list = [];
 
 function fetchDetails() {
-  let date = '';
-  addListBtn.addEventListener('click', () => {
+  let date = "";
+  addListBtn.addEventListener("click", () => {
     let task = inputTask.value;
     if (!task) return;
-    if (today.checked) date = 'today';
+    if (today.checked) date = "today";
     if (tomorrow.checked) date = "tomorrow";
-    if(selectDate.value) date = convertDateFormat(selectDate.value); 
-    if (!today.checked && !tomorrow.checked && !selectDate.value) { inputTask.value = ''; return;} 
-    const listIndex = list.findIndex(list => list.date === date);
+    if (selectDate.value) date = convertDateFormat(selectDate.value);
+    if (!today.checked && !tomorrow.checked && !selectDate.value) {
+      inputTask.value = "";
+      return;
+    }
+    const listIndex = list.findIndex((list) => list.date === date);
     if (listIndex !== -1)
-      list[listIndex].tasks.push(task);
-    else
-      list.push({ date: date, tasks: [task] });
-      
+      list[listIndex].tasks.push({ task: task, complete: false });
+    else list.push({ date: date, tasks: [{ task: task, complete: false }] });
+
     handleListRender(list);
     setLocalStorage();
-    console.log(list, today.checked, tomorrow.checked);
     inputTask.value = "";
     today.checked = false;
     tomorrow.checked = false;
-    selectDate.value = '';
-    
- 
-  })
+    selectDate.value = "";
+  });
 }
 
 function handleListRender(data) {
-   
-  listContainer.innerHTML = '';
+  listContainer.innerHTML = "";
   if (data.length === 0)
     listContainer.insertAdjacentHTML(
       "afterbegin",
       "<h3>Start Adding your To-do List</h3>",
     );
   const markup = generateListCardMarkup(data);
-  listContainer.insertAdjacentHTML('afterbegin', markup);
+  listContainer.insertAdjacentHTML("afterbegin", markup);
 }
 
 function generateListCardMarkup(data) {
@@ -57,14 +55,17 @@ function generateListCardMarkup(data) {
       <ul class="card-list">
       ${item.tasks
         .map(
-          (task, i) => ` <li class="list-description" data-id=${i}>
+          (
+            task,
+            i,
+          ) => ` <li class="list-description" data-id=${i}  data-checked=${task.complete}>
           <div class="list-item">
             <em>&#10004;</em>
-            <p id="list-item-paragraph">${task}</p>
+            <p id="list-item-paragraph">${task.task}</p>
           </div>
           <div class="list-item-icons">
             <i class="ph ph-trash delete-icn"></i>
-            <input type="checkbox" name="check" id="list-item-check"/>
+            <input type="checkbox" name="check" id="list-item-check" data-checked=${task.complete}/>
            
           </div>
         </li>`,
@@ -102,6 +103,7 @@ function getLocalStorage() {
     list = data;
     handleListContainer();
     handleListRender(list);
+    handleTaskStatus();
   }
 }
 
@@ -125,12 +127,12 @@ function handleDelete() {
 }
 function handleTaskStatus() {
   listContainer.addEventListener("click", (e) => {
-    console.log(e);
     let checkbox = e.target.closest("#list-item-check");
-    console.log(checkbox);
     if (!checkbox) return;
     const listItem = checkbox.closest(".list-description");
-    checkbox.checked
+    const listIndex = parseInt(listItem.closest(".list-card").dataset.id);
+    list[listIndex].tasks.complete = checkbox.checked;
+    list[listIndex].tasks.complete
       ? listItem.classList.add("checked")
       : listItem.classList.remove("checked");
   });
