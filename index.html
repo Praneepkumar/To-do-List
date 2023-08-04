@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>To-Do List</title>
+      <!--Font-Family-->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+      <!--Main-style-->
+      <link href="style.css" rel="stylesheet" />
+      <!--Phosphor-icon-->
+      <script src="https://unpkg.com/@phosphor-icons/web"></script>
+      <!--Script-->
+      <script defer src="script.js"></script>
+   </head>
+   <body>
+      <div class="container">
+         <div class="grid">
+            <div class="create-list">
+               <ul class="todo-input-list">
+                  <h2>List out your To-do's</h2>
+                  <li class="list-input-feild">
+                     <input type="text" placeholder='task 1' id="input-task" />
+                     <div class="input-filters">
+                        <div class="radio-filters">
+                           <div class="radio-filters-content"><input type="radio" id="today" value="today"/><label for="today">Today</label></div>
+                           <div class="radio-filters-content"><input type="radio" id="tomorrow" value="tomorrow"/><label for="tomorrow">Tomorrow</label></div>
+                        </div>
+                        <div class="date-picker">
+                           <label for="dateInput">Select date</label>
+                           <input type="date" id="dateInput">
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+               <button class="add-list-btn">Add to list</button>
+            </div>
+            <div class="render-list">
+              
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

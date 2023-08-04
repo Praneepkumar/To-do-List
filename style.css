@@ -1,0 +1,128 @@
+*,
+*::after,
+*::before{
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+body{
+ font-family: 'Inter', sans-serif;
+}
+input{
+  padding: 10px;
+  border: 1px solid #8f8d8d;
+  border-radius: 3px;
+}
+button:hover{
+  cursor: pointer;
+}
+.container{
+  max-width: 1300px;
+  margin: 50px auto;
+}
+.grid{
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 15px;
+}
+.create-list{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.todo-input-list
+{
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+ 
+}
+.list-input-feild{
+  display: flex;
+  flex-direction: column;
+gap: 15px;
+}
+.list-input-feild > input{
+  width: 90%;
+}
+
+.input-filters{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.radio-filters{
+  display: flex;
+  gap: 30px;
+}
+.radio-filters-content{
+  display: flex;
+  gap: 10px;
+}
+.date-picker{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.add-list-btn{
+  display: inline-flex;
+  width: 90%;
+  padding: 8px;
+  justify-content: center;
+}
+
+.render-list{
+  padding: 30px;
+  background: #f5f5f5;
+  height: 90vh;
+  transition: all 0.3s ease-out;
+}
+.render-list h3{
+  text-align: center;
+  color: #787878;
+}
+.todo-list{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:30px;
+}
+.list-card{
+  background: #fff;
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.card-header{
+  padding: 10px 0;
+  text-transform: capitalize;
+}
+.card-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.list-description{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.list-item,.list-item-icons{
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.list-item {
+  min-width: 150px;
+  flex-grow: 1; 
+}
+.list-item p {
+   margin: 0; 
+   padding: 5px; 
+}
+.delete-icn:hover{
+  cursor: pointer;
+}
