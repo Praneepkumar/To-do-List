@@ -40,7 +40,7 @@ function handleListRender(data) {
   if (data.length === 0)
     listContainer.insertAdjacentHTML(
       "afterbegin",
-      "<h3>Start Adding your To-do List</h3>",
+      "<h3>Your To-do's will be rendered here</h3>",
     );
   const markup = generateListCardMarkup(data);
   listContainer.insertAdjacentHTML("afterbegin", markup);
