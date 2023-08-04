@@ -49,7 +49,6 @@ function handleListRender(data) {
 }
 
 function generateListCardMarkup(data) {
- 
   return ` <ul class="todo-list">
   ${data
     .map(
@@ -64,8 +63,9 @@ function generateListCardMarkup(data) {
             <p id="list-item-paragraph">${task}</p>
           </div>
           <div class="list-item-icons">
-            <input type="checkbox" name="check" id="list-item-check"/>
             <i class="ph ph-trash delete-icn"></i>
+            <input type="checkbox" name="check" id="list-item-check"/>
+           
           </div>
         </li>`,
         )
@@ -92,7 +92,6 @@ function handleInputFeilds() {
   });
 }
 
-
 function setLocalStorage() {
   localStorage.setItem("list", JSON.stringify(list));
 }
@@ -110,21 +109,36 @@ function handleDelete() {
   listContainer.addEventListener("click", (e) => {
     const deleteIcon = e.target.closest(".delete-icn");
     if (!deleteIcon) return;
-    let confirmation = confirm("Are you sure? Clicking this will delete your To-do from the list");
+    let confirmation = confirm(
+      "Are you sure? Clicking this will delete your To-do from the list",
+    );
     if (confirmation) {
       const listItem = deleteIcon.closest(".list-description");
       const taskId = parseInt(listItem.dataset.id); // Convert to integer
-      const listIndex = parseInt(listItem.closest(".list-card").dataset.id); 
+      const listIndex = parseInt(listItem.closest(".list-card").dataset.id);
       list[listIndex].tasks.splice(taskId, 1);
-       handleListContainer();
+      handleListContainer();
       handleListRender(list);
       setLocalStorage();
     }
   });
 }
+function handleTaskStatus() {
+  listContainer.addEventListener("click", (e) => {
+    console.log(e);
+    let checkbox = e.target.closest("#list-item-check");
+    console.log(checkbox);
+    if (!checkbox) return;
+    const listItem = checkbox.closest(".list-description");
+    checkbox.checked
+      ? listItem.classList.add("checked")
+      : listItem.classList.remove("checked");
+  });
+}
+
 function handleListContainer() {
-  let filtered = list.filter(list => list.tasks.length !== 0);
-  filtered ? list = filtered : list = [];
+  let filtered = list.filter((list) => list.tasks.length !== 0);
+  filtered ? (list = filtered) : (list = []);
 }
 
 function convertDateFormat(dateString) {
@@ -132,8 +146,8 @@ function convertDateFormat(dateString) {
   const dateObj = new Date(dateString);
 
   // Step 2: Extract day, month, and date from the Date object
-  const day = dateObj.toLocaleString('en-US', { weekday: 'short' });
-  const month = dateObj.toLocaleString('en-US', { month: 'short' });
+  const day = dateObj.toLocaleString("en-US", { weekday: "short" });
+  const month = dateObj.toLocaleString("en-US", { month: "short" });
   const date = dateObj.getDate();
 
   // Step 3: Convert day and month to the desired format
@@ -141,15 +155,15 @@ function convertDateFormat(dateString) {
   const formattedMonth = month;
 
   // Step 4: Combine the formatted day, month, and date to create the desired string
-  return  `${formattedDay} ${formattedMonth} ${date}`;
+  return `${formattedDay} ${formattedMonth} ${date}`;
 }
 
 function init() {
-
   handleInputFeilds();
   fetchDetails();
-  getLocalStorage(); 
+  getLocalStorage();
   handleDelete();
+  handleTaskStatus();
 }
 
 window.addEventListener("DOMContentLoaded", init);

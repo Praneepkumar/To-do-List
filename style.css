@@ -126,3 +126,7 @@ gap: 15px;
 .delete-icn:hover{
   cursor: pointer;
 }
+.checked{
+  text-decoration: line-through;
+  color: #787878;
+}
