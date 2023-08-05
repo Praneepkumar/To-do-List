@@ -4,8 +4,7 @@ const today = document.getElementById("today");
 const tomorrow = document.getElementById("tomorrow");
 const selectDate = document.getElementById("dateInput");
 const addListBtn = document.querySelector(".add-list-btn");
-const listContainer = document.querySelector(".render-list");
-
+const listContainer = document.querySelector(".list-container");
 
 let list = [];
 
@@ -22,9 +21,9 @@ function fetchDetails() {
       return;
     }
     const listIndex = list.findIndex((list) => list.date === date);
-    if (listIndex !== -1)
-      list[listIndex].tasks.push({ task: task, complete: false });
-    else list.push({ date: date, tasks: [{ task: task, complete: false }] });
+    listIndex !== -1
+      ? list[listIndex].tasks.push({ task: task, complete: false })
+      : list.push({ date: date, tasks: [{ task: task, complete: false }] });
 
     handleListRender(list);
     setLocalStorage();
@@ -44,13 +43,14 @@ function handleListRender(data) {
     );
   const markup = generateListCardMarkup(data);
   listContainer.insertAdjacentHTML("afterbegin", markup);
+  setLocalStorage();
 }
 
 function generateListCardMarkup(data) {
-  return ` <ul class="todo-list">
+  return ` <div class="todo-list">
   ${data
     .map(
-      (item, listIndex) => ` <li class="list-card" data-id=${listIndex}>
+      (item, listIndex) => ` <div class="list-card" data-id=${listIndex}>
       <h4 class="card-header">${item.date}</h4>
       <ul class="card-list">
       ${item.tasks
@@ -59,23 +59,23 @@ function generateListCardMarkup(data) {
             task,
             i,
           ) => ` <li class="list-description" data-id=${i}  data-checked=${task.complete}>
-          <div class="list-item">
+          <div class="list-item" >
             <em>&#10004;</em>
-            <p id="list-item-paragraph">${task.task}</p>
+            <p id="list-item-paragraph ">${task.task}</p>
           </div>
           <div class="list-item-icons">
             <i class="ph ph-trash delete-icn"></i>
-            <input type="checkbox" name="check" id="list-item-check" data-checked=${task.complete}/>
+            <input type="checkbox" name="check" id="list-item-check" data-checked=${task.complete} />
            
           </div>
         </li>`,
         )
         .join("")}
       </ul>
-    </li>`,
+    </div>`,
     )
     .join("")}
-  </ul>`;
+  </div>`;
 }
 
 function handleInputFeilds() {
@@ -116,8 +116,8 @@ function handleDelete() {
     );
     if (confirmation) {
       const listItem = deleteIcon.closest(".list-description");
-      const taskId = parseInt(listItem.dataset.id); // Convert to integer
-      const listIndex = parseInt(listItem.closest(".list-card").dataset.id);
+      const taskId = Number(listItem.dataset.id);
+      const listIndex = Number(listItem.closest(".list-card").dataset.id);
       list[listIndex].tasks.splice(taskId, 1);
       handleListContainer();
       handleListRender(list);
@@ -125,47 +125,50 @@ function handleDelete() {
     }
   });
 }
+
 function handleTaskStatus() {
-  listContainer.addEventListener("click", (e) => {
-    let checkbox = e.target.closest("#list-item-check");
-    if (!checkbox) return;
-    const listItem = checkbox.closest(".list-description");
-    const listIndex = parseInt(listItem.closest(".list-card").dataset.id);
-    list[listIndex].tasks.complete = checkbox.checked;
-    list[listIndex].tasks.complete
-      ? listItem.classList.add("checked")
-      : listItem.classList.remove("checked");
+  const checkboxes = document.querySelectorAll("#list-item-check");
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", (e) => {
+      let checkbox = e.target.closest("#list-item-check");
+      if (!checkbox) return;
+
+      const listIndex = Number(checkbox.closest(".list-card").dataset.id);
+      const listDescriptionIndex = Number(
+        checkbox.closest(".list-description").dataset.id,
+      );
+
+      const checkboxStatus = checkbox.checked ? true : false;
+      list[listIndex].tasks[listDescriptionIndex].complete = checkboxStatus;
+      checkboxStatus
+        ? checkbox.closest(".list-description").classList.add("checked")
+        : checkbox.closest(".list-description").classList.remove("checked");
+      setLocalStorage();
+    });
   });
 }
-
 function handleListContainer() {
   let filtered = list.filter((list) => list.tasks.length !== 0);
   filtered ? (list = filtered) : (list = []);
+  setLocalStorage();
 }
 
 function convertDateFormat(dateString) {
-  // Step 1: Create a Date object from the original string
   const dateObj = new Date(dateString);
-
-  // Step 2: Extract day, month, and date from the Date object
   const day = dateObj.toLocaleString("en-US", { weekday: "short" });
   const month = dateObj.toLocaleString("en-US", { month: "short" });
   const date = dateObj.getDate();
-
-  // Step 3: Convert day and month to the desired format
   const formattedDay = day;
   const formattedMonth = month;
-
-  // Step 4: Combine the formatted day, month, and date to create the desired string
   return `${formattedDay} ${formattedMonth} ${date}`;
 }
 
 function init() {
   handleInputFeilds();
   fetchDetails();
-  getLocalStorage();
   handleDelete();
   handleTaskStatus();
+  getLocalStorage();
 }
 
 window.addEventListener("DOMContentLoaded", init);
